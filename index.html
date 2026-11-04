@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Forever LoRa</title>
+  <meta name="description" content="A plain-English guide to decentralized communication, LoRa, mesh networks, Meshtastic, and MeshCore, plus Forever LoRa's 3D-printed cases.">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:title" content="Forever LoRa">
+  <meta property="og:description" content="When the towers go dark, the mesh keeps talking.">
+  <link rel="icon" href="assets/img/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=VT323&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <script>
+    // Runs before the page paints, so the boot screen can appear without a flash.
+    // Plays once per browser tab, and never for people who prefer reduced motion.
+    (function () {
+      var seen = false;
+      try { seen = sessionStorage.getItem("booted") === "1"; } catch (e) {}
+      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!seen && !calm) {
+        document.documentElement.classList.add("boot");
+        // Safety net: never leave the page hidden if main.js fails to load.
+        setTimeout(function () { document.documentElement.classList.remove("boot"); }, 8000);
+      }
+    })();
+  </script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/mesh-game.js" defer></script>
+  <script src="assets/js/phone.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#manual">Skip to the field manual</a>
+
+  <canvas id="bg-mesh" aria-hidden="true"></canvas>
+  <div class="crt" aria-hidden="true"></div>
+  <div class="roll" aria-hidden="true"></div>
+
+  <!-- Decorative screen crack, drawn with a few jagged lines -->
+  <svg class="crack" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <path d="M400 18 L318 62 L286 54 L238 112 L246 150 L190 188 L176 244 L126 272 L118 330 L74 400"/>
+    <path d="M286 54 L266 16 L272 0"/>
+    <path d="M238 112 L176 104 L128 124 L82 112"/>
+    <path d="M246 150 L312 168 L340 214 L400 232"/>
+    <path d="M190 188 L142 176"/>
+    <path d="M176 244 L222 288 L226 340"/>
+  </svg>
+
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#top">FOREVER<span>://</span>LoRa</a>
+      <p class="status" aria-hidden="true">
+        <span class="bad">GRID: FAULT</span>
+        <span class="bad">CELL: NO SIGNAL</span>
+        <span class="good">MESH: ONLINE</span>
+      </p>
+      <nav aria-label="Main">
+        <a href="#manual">Manual</a>
+        <a href="#simulator">Play</a>
+        <a href="#hardware">Cases</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <!-- ========== HERO ========== -->
+      <section class="hero">
+        <div class="hero-logo">
+          <img src="assets/img/logo.webp" width="900" height="899"
+               alt="Forever LoRa logo: a glowing green mesh network inside a circular radar display, labeled Mesh Network Technology, established 2024.">
+        </div>
+        <div class="hero-text">
+          <p class="eyebrow" aria-hidden="true">&gt;_ RECOVERED TRANSMISSION // SIGNAL 31%</p>
+          <h1 aria-label="Forever LoRa">
+            <span class="glitch" data-text="FOREVER">FOREVER</span>
+            <span class="glitch glitch-late" data-text="LoRa">LoRa</span>
+          </h1>
+          <p class="tagline">When the towers go dark, the mesh keeps talking.</p>
+          <p>Forever LoRa is dedicated to the decentralization of data, communication, energy, water storage and sourcing, and so much more. It's about not depending on one company, one tower, or one network.</p>
+          <p>Start with the field manual below for a quick overview of LoRa, mesh networks, Meshtastic, and MeshCore. Then try to keep a mesh alive in a storm, practice sending an encrypted message, and check out my 3D-printed cases.</p>
+          <a class="btn" href="#manual">[ Open field manual ]</a>
+        </div>
+      </section>
+
+      <div class="rule" aria-hidden="true"><span></span><b>SECTOR 02 // PARTIAL DATA LOSS</b><span></span></div>
+
+      <!-- ========== FIELD MANUAL TILES ========== -->
+      <section id="manual" class="section">
+        <p class="eyebrow" aria-hidden="true">&gt;_ cat /salvage/field_manual.txt</p>
+        <h2>Field manual</h2>
+        <p class="lede">Six short files. Read the summary, or decrypt a file for the details.</p>
+
+        <div class="tiles">
+          <article class="tile">
+            <p class="file" aria-hidden="true"><span>FILE 01</span><span class="ok">RECOVERED</span></p>
+            <h3>What is decentralized communication?</h3>
+            <p class="gist">Most messages pass through someone else's infrastructure: cell towers, data centers, and company servers. A decentralized network spreads that work across its users, so no single owner or outage decides whether a message gets through.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <p><strong>Why it matters:</strong> storms, remote terrain, and packed events can all overwhelm or knock out normal networks. Decentralized systems have fewer single points of failure.</p>
+                <p><strong>It's bigger than radio:</strong> peer-to-peer file sharing, federated social networks like Mastodon, and community-run networks all apply the same idea. Forever LoRa is interested in all of it.</p>
+                <p><strong>The tradeoff:</strong> you usually give up some speed and convenience in exchange for independence. Someone also has to run the network, and that someone is the community.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://reticulum.network/" target="_blank" rel="noopener">Reticulum: a networking stack for almost any radio</a></li>
+                    <li><a href="https://briarproject.org/" target="_blank" rel="noopener">Briar: peer-to-peer secure messaging</a></li>
+                    <li><a href="https://matrix.org/" target="_blank" rel="noopener">Matrix: an open standard for decentralized chat</a></li>
+                    <li><a href="https://joinmastodon.org/" target="_blank" rel="noopener">Mastodon: decentralized social media</a></li>
+                    <li><a href="https://nostr.com/" target="_blank" rel="noopener">Nostr: social posts controlled by users</a></li>
+                    <li><a href="https://ipfs.tech/" target="_blank" rel="noopener">IPFS: decentralized file storage</a></li>
+                    <li><a href="https://www.nycmesh.net/" target="_blank" rel="noopener">NYC Mesh: a community-run network</a></li>
+                    <li><a href="https://freifunk.net/en/" target="_blank" rel="noopener">Freifunk: community networks in Germany</a></li>
+                    <li><a href="https://www.internetsociety.org/our-work/connectivity/community-centered-connectivity/" target="_blank" rel="noopener">Internet Society: community-centered connectivity</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Peer-to-peer" target="_blank" rel="noopener">Wikipedia: peer-to-peer networks</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Fediverse" target="_blank" rel="noopener">Wikipedia: the Fediverse</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="tile">
+            <p class="file" aria-hidden="true"><span>FILE 02</span><span class="warn">BLOCK DAMAGE</span></p>
+            <h3>What is LoRa?</h3>
+            <p class="gist">LoRa, short for "long range," is a radio technology that sends small amounts of data across long distances using very little power. Think text messages and sensor readings, not video calls.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <p><strong>How it works:</strong> LoRa spreads each signal across a sweeping range of frequencies, called a chirp. That helps a receiver pick out very weak signals.</p>
+                <p><strong>Range:</strong> expect anything from a few kilometers in town to far more with height and a clear line of sight. Meshtastic lists a 331&nbsp;km record, but that's a record, not a normal day.</p>
+                <p><strong>Speed:</strong> usually well under 40&nbsp;kbps, and often far less. That's slower than dial-up, but plenty for short messages.</p>
+                <p><strong>Frequencies:</strong> allowed bands and power limits vary by country. For example, 915&nbsp;MHz is common in North America and 868&nbsp;MHz in Europe, so check your local rules.</p>
+                <p><strong>LoRa vs. LoRaWAN:</strong> LoRa is the radio link. LoRaWAN is a network system where devices usually reach a server through gateways. Meshtastic and MeshCore use LoRa radios, but they aren't LoRaWAN.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://www.semtech.com/lora/what-is-lora" target="_blank" rel="noopener">Semtech: what is LoRa?</a></li>
+                    <li><a href="https://www.thethingsnetwork.org/docs/lorawan/what-is-lorawan/" target="_blank" rel="noopener">The Things Network: LoRa and LoRaWAN explained</a></li>
+                    <li><a href="https://lora-alliance.org/about-lorawan/" target="_blank" rel="noopener">LoRa Alliance: about LoRaWAN</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/LoRa" target="_blank" rel="noopener">Wikipedia: LoRa</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Chirp_spread_spectrum" target="_blank" rel="noopener">Wikipedia: chirp spread spectrum</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Low-power_wide-area_network" target="_blank" rel="noopener">Wikipedia: low-power wide-area networks</a></li>
+                    <li><a href="https://meshtastic.org/docs/overview/radio-settings/" target="_blank" rel="noopener">Meshtastic: radio settings explained</a></li>
+                    <li><a href="https://meshtastic.org/docs/configuration/radio/lora/" target="_blank" rel="noopener">Meshtastic: LoRa configuration and regions</a></li>
+                    <li><a href="https://www.ecfr.gov/current/title-47/chapter-I/subchapter-A/part-15" target="_blank" rel="noopener">US rules: FCC Part 15</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="tile tile-holed">
+            <p class="file" aria-hidden="true"><span>FILE 03</span><span class="ok">RECOVERED</span></p>
+            <h3>How does a mesh work?</h3>
+            <p class="gist">Radios in a mesh pass messages along for each other. If your friend is out of range, a radio between you can relay the message. Each jump is called a hop, and no tower or internet connection is needed.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <p><strong>Inside a node:</strong> a typical device combines a LoRa radio, a small processor, an antenna, and a battery. Many pair with a phone, which acts as the keyboard and screen.</p>
+                <p><strong>Height wins:</strong> a node on a hill or rooftop can connect far more people than one at ground level.</p>
+                <p><strong>Airtime is limited:</strong> radios share the same slow channel, so every relay uses up capacity. That's why networks limit hops and delivery is never guaranteed.</p>
+                <p><strong>Privacy:</strong> encryption lets relays carry messages they can't read, but channels using a publicly known key aren't private. Some information, like routing data, may also be visible.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://meshtastic.org/docs/overview/mesh-algo/" target="_blank" rel="noopener">Meshtastic: how the mesh broadcasts messages</a></li>
+                    <li><a href="https://meshtastic.org/docs/overview/encryption/" target="_blank" rel="noopener">Meshtastic: how encryption works</a></li>
+                    <li><a href="https://site.meshtastic.org/" target="_blank" rel="noopener">Meshtastic Site Planner: estimate coverage</a></li>
+                    <li><a href="https://meshmap.net/" target="_blank" rel="noopener">MeshMap: nodes around the world</a></li>
+                    <li><a href="https://www.heywhatsthat.com/" target="_blank" rel="noopener">HeyWhatsThat: see what a location can see</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Wireless_mesh_network" target="_blank" rel="noopener">Wikipedia: wireless mesh networks</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Line-of-sight_propagation" target="_blank" rel="noopener">Wikipedia: line-of-sight radio</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Fresnel_zone" target="_blank" rel="noopener">Wikipedia: Fresnel zones</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" rel="noopener">Wikipedia: AES encryption</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="tile">
+            <p class="file" aria-hidden="true"><span>FILE 04</span><span class="warn">BAD SECTORS</span></p>
+            <h3>What is it used for?</h3>
+            <p class="gist">Long range, low power, and no need for a cell plan make LoRa useful far beyond chat. It can be found everywhere from backcountry trails to farms, factories, and city streets.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <ul class="uses">
+                  <li><strong>Off-grid trips:</strong> hiking, hunting, sailing, and overlanding</li>
+                  <li><strong>Outage backup:</strong> neighborhood and storm communications</li>
+                  <li><strong>Events:</strong> festivals, races, and volunteer teams</li>
+                  <li><strong>Farming:</strong> soil, water tanks, and livestock tracking</li>
+                  <li><strong>Environment:</strong> weather stations and river levels</li>
+                  <li><strong>Cities:</strong> utility meters, parking, and street lights</li>
+                  <li><strong>Industry:</strong> asset tracking and equipment monitoring</li>
+                  <li><strong>Home:</strong> gate, mailbox, and property sensors</li>
+                </ul>
+                <p>Many commercial sensor projects use LoRaWAN rather than a mesh. A hobby mesh also makes a useful backup, but it doesn't replace emergency services or a dedicated SOS device.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://www.thethingsnetwork.org/" target="_blank" rel="noopener">The Things Network: a global LoRaWAN community</a></li>
+                    <li><a href="https://www.thethingsnetwork.org/community/" target="_blank" rel="noopener">Find a Things Network community near you</a></li>
+                    <li><a href="https://lora-alliance.org/" target="_blank" rel="noopener">LoRa Alliance: the LoRaWAN industry group</a></li>
+                    <li><a href="https://www.semtech.com/lora" target="_blank" rel="noopener">Semtech: LoRa technology overview</a></li>
+                    <li><a href="https://www.dryad.net/" target="_blank" rel="noopener">Dryad: LoRa-based wildfire detection</a></li>
+                    <li><a href="https://www.ready.gov/" target="_blank" rel="noopener">Ready.gov: plan ahead for disasters</a></li>
+                    <li><a href="https://www.arrl.org/" target="_blank" rel="noopener">ARRL: amateur radio in the US</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="tile">
+            <p class="file" aria-hidden="true"><span>FILE 05</span><span class="ok">RECOVERED</span></p>
+            <h3>What is Meshtastic?</h3>
+            <p class="gist">Meshtastic is an open-source, community-driven project that turns inexpensive LoRa radios into an off-grid mesh for encrypted messages and location sharing. It's a popular place to start.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <p><strong>How it relays:</strong> nodes can generally rebroadcast what they hear, so a network can form with little planning. The default limit is three hops.</p>
+                <p><strong>How you use it:</strong> flash a compatible radio, pair it with a phone app, and pick your region and channel.</p>
+                <p><strong>Good fit:</strong> a group that wants to get running quickly, with no dedicated infrastructure required.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://meshtastic.org" target="_blank" rel="noopener">Official site</a></li>
+                    <li><a href="https://meshtastic.org/docs/getting-started/" target="_blank" rel="noopener">Getting started guide</a></li>
+                    <li><a href="https://flasher.meshtastic.org/" target="_blank" rel="noopener">Web flasher: install the firmware</a></li>
+                    <li><a href="https://client.meshtastic.org/" target="_blank" rel="noopener">Web client</a></li>
+                    <li><a href="https://meshtastic.org/docs/hardware/devices/" target="_blank" rel="noopener">Supported hardware</a></li>
+                    <li><a href="https://meshtastic.org/docs/configuration/radio/channels/" target="_blank" rel="noopener">Channel configuration</a></li>
+                    <li><a href="https://github.com/meshtastic/firmware" target="_blank" rel="noopener">Firmware on GitHub</a></li>
+                    <li><a href="https://www.reddit.com/r/meshtastic/" target="_blank" rel="noopener">r/meshtastic on Reddit</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="tile">
+            <p class="file" aria-hidden="true"><span>FILE 06</span><span class="warn">CHECKSUM FAIL</span></p>
+            <h3>What is MeshCore?</h3>
+            <p class="gist">MeshCore is an open-source mesh system for LoRa and other packet radios. Each device has a fixed role, and instead of every radio relaying, dedicated repeaters carry the traffic.</p>
+            <details>
+              <summary>Decrypt full file</summary>
+              <div class="more">
+                <p><strong>The roles:</strong> a <em>companion</em> connects to your app and doesn't relay. A <em>repeater</em> extends coverage. A <em>room server</em> hosts shared posts, like a tiny bulletin board.</p>
+                <p><strong>How it routes:</strong> a first message can flood the network to find a path, then later messages follow that path instead of flooding again.</p>
+                <p><strong>Good fit:</strong> an area where people are willing to plan and place repeaters.</p>
+                <p><strong>Compatibility:</strong> MeshCore and Meshtastic are separate systems and don't talk to each other directly.</p>
+                <div class="learn">
+                  <p>Learn more:</p>
+                  <ul>
+                    <li><a href="https://meshcore.co.uk/" target="_blank" rel="noopener">Official site</a></li>
+                    <li><a href="https://flasher.meshcore.co.uk/" target="_blank" rel="noopener">Web flasher: install the firmware</a></li>
+                    <li><a href="https://github.com/meshcore-dev/MeshCore" target="_blank" rel="noopener">MeshCore on GitHub</a></li>
+                    <li><a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md" target="_blank" rel="noopener">MeshCore FAQ</a></li>
+                    <li><a href="https://www.reddit.com/r/meshcore/" target="_blank" rel="noopener">r/meshcore on Reddit</a></li>
+                  </ul>
+                </div>
+              </div>
+            </details>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========== MESH GAME (shown by mesh-game.js, since it needs JavaScript) ========== -->
+      <section id="simulator" class="section" hidden>
+        <p class="eyebrow" aria-hidden="true">&gt;_ ./mesh_sim --hostile</p>
+        <h2>Keep the mesh alive</h2>
+        <p class="lede">Node A keeps sending a message to node B, and every radio in range repeats it. Break things in free play, then see how long you can survive the storm.</p>
+        <div class="sim">
+          <div class="game-controls">
+            <div class="seg" role="group" aria-label="Game mode">
+              <button class="seg-btn" id="mode-free" type="button" aria-pressed="true">Free play</button>
+              <button class="seg-btn" id="mode-storm" type="button" aria-pressed="false">Storm survival</button>
+            </div>
+            <div class="seg" role="group" aria-label="Hop limit">
+              <span class="seg-label">Hop limit</span>
+              <button class="seg-btn" data-hops="3" type="button" aria-pressed="false">3</button>
+              <button class="seg-btn" data-hops="5" type="button" aria-pressed="false">5</button>
+              <button class="seg-btn" data-hops="7" type="button" aria-pressed="true">7</button>
+            </div>
+          </div>
+          <div class="hud">
+            <span>DELIVERED <b id="stat-delivered">0</b></span>
+            <span>NODES DOWN <b id="stat-down">0</b></span>
+            <span data-storm hidden>SCORE <b id="stat-score">0</b></span>
+            <span data-storm hidden>LIVES <b id="stat-lives">###</b></span>
+            <span data-storm hidden>BEST <b id="stat-best">0</b></span>
+          </div>
+          <div class="stage">
+            <canvas id="sim-canvas" role="img" aria-label="Map of radio nodes across mountains and a lake, passing a message from node A to node B. Use the buttons below to knock out or repair nodes."></canvas>
+            <div class="game-over" id="game-over" hidden>
+              <p class="over-title">Signal lost</p>
+              <p>Score <b id="over-score">0</b> // <b id="over-delivered">0</b> messages delivered</p>
+              <button class="btn" id="over-again" type="button">[ Run it again ]</button>
+            </div>
+          </div>
+          <div class="sim-bar">
+            <p id="sim-readout" class="sim-readout" role="status">Starting network&hellip;</p>
+            <div class="sim-actions">
+              <button class="btn btn-small btn-alert" id="sim-kill" type="button">[ Knock out a node ]</button>
+              <button class="btn btn-small" id="sim-repair" type="button">[ Repair all ]</button>
+            </div>
+          </div>
+        </div>
+        <p class="note" id="game-help"></p>
+        <p class="note">What to try: set the hop limit to 3, Meshtastic's default, then knock out both hilltops. High sites let messages cross the map in fewer hops, which is why mesh builders love them. Hops here count relays, so a direct link is 0 hops. This is a simplified flood for illustration, and real networks differ in how they route.</p>
+      </section>
+
+      <div class="rule" aria-hidden="true"><span></span><b>INCOMING MESSAGE // DECRYPT?</b><span></span></div>
+
+      <!-- ========== PHONE SIMULATOR (shown by phone.js) ========== -->
+      <section id="phone" class="section" hidden>
+        <p class="eyebrow" aria-hidden="true">&gt;_ ./field_phone --practice</p>
+        <h2>Send a message</h2>
+        <p class="lede">Practice on a pretend phone: post to the public LongFast channel, then create your own encrypted channel. Only preset phrases are available, and nothing actually leaves your browser.</p>
+        <div class="phone-lab">
+          <div class="phone">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-screen" id="phone-screen"></div>
+          </div>
+          <div class="lab-side">
+            <div class="lab-panel">
+              <h3>Your mission</h3>
+              <p class="coach" id="phone-coach" role="status"></p>
+              <ol class="missions" id="phone-missions"></ol>
+              <button class="btn btn-small" id="phone-reset" type="button">[ Start over ]</button>
+            </div>
+            <div class="lab-panel">
+              <h3>On the air</h3>
+              <ul class="air-log" id="air-log">
+                <li class="air-empty">No packets yet. Send a message to see what goes out over the air.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p class="note">An unofficial practice simulator, not the Meshtastic app. Real menus differ between phones and app versions, so see the <a href="https://meshtastic.org/docs/configuration/radio/channels/" target="_blank" rel="noopener">channel docs</a> and <a href="https://meshtastic.org/docs/overview/encryption/" target="_blank" rel="noopener">encryption docs</a> before relying on one. This covers channel encryption, and direct messages work differently.</p>
+      </section>
+
+      <div class="rule" aria-hidden="true"><span></span><b>WARNING // STRUCTURAL DAMAGE AHEAD</b><span></span></div>
+
+      <!-- ========== CASES ========== -->
+      <section id="hardware" class="section">
+        <p class="eyebrow" aria-hidden="true">&gt;_ ls /salvage/hardware</p>
+        <h2>Salvaged hardware</h2>
+        <p class="lede">My 3D-printed node case, designed to keep a LoRa radio protected and ready for the field. Select a photo to enlarge it.</p>
+
+        <div class="gallery">
+          <a class="shot shot-main" href="assets/img/case-angle.webp">
+            <img src="assets/img/case-angle.webp" width="1200" height="900" loading="lazy" alt="Red 3D-printed case at an angle, showing the display window, button, Forever LoRa logo, and side openings.">
+            <span>IMG_01 // Field view</span>
+          </a>
+          <a class="shot" href="assets/img/case-front-2.webp">
+            <img src="assets/img/case-front-2.webp" width="1200" height="900" loading="lazy" alt="Front of the red case with its screen window, white status light, button, embossed logo, and antenna.">
+            <span>IMG_02 // Front</span>
+          </a>
+          <a class="shot" href="assets/img/case-back-hex.webp">
+            <img src="assets/img/case-back-hex.webp" width="1200" height="900" loading="lazy" alt="Back of the red case with a honeycomb pattern of hexagonal recesses.">
+            <span>IMG_03 // Honeycomb back</span>
+          </a>
+          <a class="shot" href="assets/img/case-three-quarter.webp">
+            <img src="assets/img/case-three-quarter.webp" width="1200" height="900" loading="lazy" alt="Three-quarter view of the case, showing its reinforced corners and textured side loop.">
+            <span>IMG_04 // Three-quarter</span>
+          </a>
+          <a class="shot" href="assets/img/case-side-grip.webp">
+            <img src="assets/img/case-side-grip.webp" width="1200" height="900" loading="lazy" alt="Side of the case with a diamond-textured surface and a built-in loop.">
+            <span>IMG_05 // Textured side</span>
+          </a>
+          <a class="shot" href="assets/img/case-ports.webp">
+            <img src="assets/img/case-ports.webp" width="1200" height="900" loading="lazy" alt="Opposite side of the case with a USB-C opening and two small recessed slots.">
+            <span>IMG_06 // Ports</span>
+          </a>
+        </div>
+
+        <div class="spec">
+          <h3>Build notes</h3>
+          <ul>
+            <li>Screen window with a white status light and front button</li>
+            <li>External antenna connector on top</li>
+            <li>USB-C opening and recessed side slots</li>
+            <li>Textured sides with a built-in loop</li>
+            <li>Honeycomb back panel and reinforced corners</li>
+          </ul>
+          <!-- When the STL listing is ready, replace this paragraph with:
+               <a class="btn" href="YOUR-MAKERWORLD-LINK" target="_blank" rel="noopener">[ Get the files ]</a> -->
+          <p class="pending">STL files: coming soon. Email me for more information.</p>
+        </div>
+      </section>
+
+      <div class="rule" aria-hidden="true"><span></span><b>PERSONNEL FILE RECOVERED</b><span></span></div>
+
+      <!-- ========== ABOUT ========== -->
+      <section id="about" class="section">
+        <p class="eyebrow" aria-hidden="true">&gt;_ whoami</p>
+        <h2>About</h2>
+        <div class="about">
+          <p>Hi. My name is Josh. Please enjoy the content, and don't hesitate to reach out. I enjoy comments, questions, and constructive criticism.</p>
+          <p>I was born in 1981 and was introduced to computers, like the Apple II, early in life. I quickly grew to love all things building and electronics. I was a member of the Lego Club from the late '80s into the early '90s, routinely disassembled toys to inspect their inner workings, and made several stop-motion films in the early '90s.</p>
+          <p>Having technology and the very early internet in our home (I think around 1990), and spending much of my childhood in the Missouri woods and rivers or windsurfing and diving in the ocean, gave me a love for nature, technology, and decentralization. This is just a fun place to visit to catch up on the latest projects and ideas.</p>
+        </div>
+      </section>
+
+      <div class="rule" aria-hidden="true"><span></span><b>CARRIER DETECTED</b><span></span></div>
+
+      <!-- ========== CONTACT ========== -->
+      <section id="contact" class="section">
+        <p class="eyebrow" aria-hidden="true">&gt;_ open --channel public</p>
+        <h2>Open channel</h2>
+        <div class="contact">
+          <div class="contact-card">
+            <h3>Email</h3>
+            <p>Questions, ideas, or more information about a project:</p>
+            <p class="email"><a id="email" href="mailto:foreverlora_contact@proton.me">foreverlora_contact@proton.me</a></p>
+            <button class="btn btn-small" id="copy-email" type="button" hidden>[ Copy address ]</button>
+            <p id="copy-status" class="note" role="status"></p>
+          </div>
+          <div class="contact-card">
+            <h3>Find me online</h3>
+            <p>Look for Forever LoRa on YouTube and TikTok.</p>
+            <p class="links">
+              <a class="btn btn-small" href="https://www.youtube.com/@ForeverLoRa" target="_blank" rel="noopener">[ YouTube: @ForeverLoRa ]</a>
+              <a class="btn btn-small" href="https://www.tiktok.com/@forever.lora" target="_blank" rel="noopener">[ TikTok: @forever.lora ]</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== HIDDEN TERMINAL (shown by main.js) ========== -->
+      <section id="terminal" class="terminal" aria-label="Interactive terminal" hidden>
+        <div id="term-output" class="term-output" role="log" aria-live="polite">
+          <p>FOREVERLORA EMERGENCY SHELL. Type <b>help</b> and press Enter.</p>
+        </div>
+        <form id="term-form" class="term-line" autocomplete="off">
+          <label for="term-input">survivor@mesh:~$</label>
+          <input id="term-input" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="send">
+        </form>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>FOREVER LoRa // EST. 2024</p>
+      <p>The cyber war is fiction. The radios are real. Not affiliated with Meshtastic or MeshCore.</p>
+    </footer>
+  </div>
+
+  <!-- Photo viewer. A native dialog handles focus and the Escape key for us. -->
+  <dialog id="viewer" class="viewer" aria-label="Enlarged photo">
+    <img id="viewer-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="">
+    <div class="viewer-bar">
+      <button class="btn btn-small" id="viewer-prev" type="button">[ &lt; Prev ]</button>
+      <p id="viewer-caption"></p>
+      <button class="btn btn-small" id="viewer-next" type="button">[ Next &gt; ]</button>
+      <button class="btn btn-small" id="viewer-close" type="button">[ Close ]</button>
+    </div>
+  </dialog>
+</body>
+</html>
